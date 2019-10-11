@@ -5,15 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PM.Common\PM.Common.csproj" />
+    <ProjectReference Include="..\PM.Domain\PM.Domain.csproj" />
   </ItemGroup>
 
 </Project>

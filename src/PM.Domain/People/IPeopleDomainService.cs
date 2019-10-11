@@ -1,0 +1,13 @@
+﻿using PM.Common.CommonModels;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PM.Domain.People
+{
+    public interface IPeopleDomainService
+    {
+        Task<Result<int>> SavePerson(Person person);
+    }
+}
