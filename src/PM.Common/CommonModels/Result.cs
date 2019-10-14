@@ -17,7 +17,7 @@ namespace PM.Common.CommonModels
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
 
-        public static Result GetSuccessINstance() => new Result(0, true, "OK");
+        public static Result GetSuccessInstance() => new Result(0, true, "OK");
     }
 
     public class Result<T> : Result
@@ -29,5 +29,7 @@ namespace PM.Common.CommonModels
         }
 
         public T Data { get; set; }
+        public static Result<T> GetSuccessInstance(T value) 
+            => new Result<T>(0, true, "OK", value);
     }
 }

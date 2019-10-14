@@ -13,6 +13,7 @@ namespace PM.Domain.People
         private string _personalNumber;
         private DateTime _birthDate;
         private string _city;
+        private int _cityID;
         private string _firstName;
         private string _lastName;
         private string _imageUrl;
@@ -124,6 +125,15 @@ namespace PM.Domain.People
             }
         }
 
+        public int CityID
+        {
+            get => _cityID;
+            set
+            {
+                _cityID = value;
+                Validate();
+            }
+        }
 
         public PhoneNumber PhoneNumber
         {
@@ -151,7 +161,7 @@ namespace PM.Domain.People
             _validators = new Dictionary<string, Func<Result>>()
             {
                 { "FirstName", () => {
-                   var result = Result.GetSuccessINstance();
+                   var result = Result.GetSuccessInstance();
                     if(string.IsNullOrEmpty(_firstName))
                         result = new Result(-1, false, "სახელი სავალდებულო ველია");
                     if(_firstName.Length < 2 || _firstName.Length > 50)
