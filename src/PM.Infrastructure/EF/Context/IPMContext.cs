@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PM.Infrastructure.EF.Context
 {
-    public interface IPMContext
+    public interface IPMContext : IDisposable
     {
         DbSet<PersonEntity> People { get;  }
         DbSet<PeopleRelationEntity> PeopleRelations { get; }

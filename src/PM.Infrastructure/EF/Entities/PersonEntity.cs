@@ -19,6 +19,6 @@ namespace PM.Infrastructure.EF.Entities
 
         public int? CityID { get; set; }
 
-        public virtual List<PeopleRelationEntity> Relations { get; set; }
+        public List<PeopleRelationEntity> Relations { get; set; }
     }
 }

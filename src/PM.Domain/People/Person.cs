@@ -13,7 +13,7 @@ namespace PM.Domain.People
         private string _personalNumber;
         private DateTime _birthDate;
         private string _city;
-        private int _cityID;
+        private int? _cityID;
         private string _firstName;
         private string _lastName;
         private string _imageUrl;
@@ -41,6 +41,27 @@ namespace PM.Domain.People
             Validate("FirstName");
         }
 
+        public void AddRelatedPerson(Person rp, RelationTypes type)
+        {
+            var relPerson = new RelatedPerson
+            {
+                BirthDate = rp.BirthDate,
+                City = rp.City,
+                CityID = rp.CityID,
+                FirstName = rp.FirstName,
+                Gender = rp.Gender,
+                ImageUrl = rp.ImageUrl,
+                ID = rp.ID,
+                LastName = rp.LastName,
+                PersonalNumber = rp.PersonalNumber,
+                PhoneNumber = rp.PhoneNumber.Number.Value,
+                PhoneNumberType = rp.PhoneNumber.PhoneNumberType,
+                RelationType = type
+            };
+            _relatedPeople.Add(relPerson);
+            //TODO: VALIDATIOn
+        }
+
         public void AddRelatedPerson(RelatedPerson relatedPerson)
         {
             _relatedPeople.Add(relatedPerson);
@@ -63,7 +84,7 @@ namespace PM.Domain.People
             }
         }
 
-        public IReadOnlyCollection<RelatedPerson> RelatedPeople => _relatedPeople;
+        public IReadOnlyCollection<RelatedPerson> RelatedPeople { get => _relatedPeople; set => AddRelatedPeople(value); }
 
         public string FirstName
         {
@@ -125,7 +146,7 @@ namespace PM.Domain.People
             }
         }
 
-        public int CityID
+        public int? CityID
         {
             get => _cityID;
             set
@@ -166,7 +187,7 @@ namespace PM.Domain.People
                         result = new Result(-1, false, "სახელი სავალდებულო ველია");
                     if(_firstName.Length < 2 || _firstName.Length > 50)
                         result = new Result(-1, false, "სახელში უნდა შედგებოდეს მინიმუმ 2 და მაქსიმუმ 50 სიმბოლოსგან");
-                    if(!Regex.IsMatch(Console.ReadLine(), "(^[a-zA-Z]+$|^[ა-ჰ]+$)"))
+                    if(!Regex.IsMatch(_firstName, "(^[a-zA-Z]+$|^[ა-ჰ]+$)"))
                         result = new Result(-1, false, "უნდა შეიცავდეს მხოლოდ ქართული ან ლათინური ანბანის ასოებს, არ უნდა შეიცავდეს ერთდროულად ლათინურ და ქართულ ასოებს");
                     return result;
                 } },

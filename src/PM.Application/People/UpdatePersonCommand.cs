@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PM.Application.People
 {
-    public class CreatePersonCommand
+    public class UpdatePersonCommand
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -14,6 +14,5 @@ namespace PM.Application.People
         public int? CityID { get; set; }
         public string PhoneNumber { get; set; }
         public int PhoneNumberType { get; set; }
-        public string ImageUrl { get; set; }
     }
 }

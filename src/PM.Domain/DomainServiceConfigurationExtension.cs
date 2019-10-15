@@ -10,7 +10,7 @@ namespace PM.Domain
     {
         public static void RegisterDomain(this IServiceCollection services)
         {
-            services.AddSingleton<IPeopleDomainService, PeopleDomainService>();
+            services.AddScoped<IPeopleDomainService, PeopleDomainService>();
         }
     }
 }

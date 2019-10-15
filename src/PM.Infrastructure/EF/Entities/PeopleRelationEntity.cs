@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PM.Domain.People;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,5 +12,7 @@ namespace PM.Infrastructure.EF.Entities
 
         public int RelatedPersonID { get; set; }
         public virtual PersonEntity RelatedPerson { get; set; }
+
+        public RelationTypes RelationType { get; set; }
     }
 }

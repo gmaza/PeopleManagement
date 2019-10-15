@@ -11,7 +11,7 @@ namespace PM.Application
     {
         public static void RegisterApplication(this IServiceCollection services)
         {
-            services.AddSingleton<IPeopleApplication, PeopleApplication>();
+            services.AddScoped<IPeopleApplication, PeopleApplication>();
         }
     }
 }

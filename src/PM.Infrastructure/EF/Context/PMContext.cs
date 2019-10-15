@@ -3,7 +3,7 @@ using PM.Infrastructure.EF.Entities;
 
 namespace PM.Infrastructure.EF.Context
 {
-    public class PMContext : DbContext
+    public class PMContext : DbContext, IPMContext
     {
         public PMContext(DbContextOptions<PMContext> options) : base(options)
         {
