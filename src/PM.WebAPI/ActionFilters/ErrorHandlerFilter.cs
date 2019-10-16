@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
+using PM.Common.CommonModels;
 using PM.Common.Exceptions;
 using PM.Infrastructure.SharedResources;
 using System;
@@ -27,7 +28,8 @@ namespace PM.WebAPI.ActionFilters
                 var ex = result.Exception as LocalizableException;
                 var errorText = _sharedLocalizer[ex.MessageKey]?.Value;
                 result.ExceptionHandled = true;
-                result.Result = new BadRequestObjectResult(errorText);
+                Result resultObj = new Result(-1, false, errorText);
+                result.Result = new BadRequestObjectResult(resultObj);
             }
         }
     }
