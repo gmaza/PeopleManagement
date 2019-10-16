@@ -96,6 +96,7 @@ namespace PM.Infrastructure.EF.Repository
         {
             var old = Context.Set<CityEntity>().Find(id);
             old.Name = entity.Name;
+            old.LastUpdateDate = DateTime.Now;
             Context.SaveChanges();
             return Result.GetSuccessInstance();
         }
@@ -104,6 +105,7 @@ namespace PM.Infrastructure.EF.Repository
         {
             var old = Context.Set<CityEntity>().Find(id);
             old.Name = entity.Name;
+            old.LastUpdateDate = DateTime.Now;
             await Context.SaveChangesAsync();
             return Result.GetSuccessInstance();
         }

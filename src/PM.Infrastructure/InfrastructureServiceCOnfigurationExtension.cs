@@ -47,7 +47,7 @@ namespace PM.Infrastructure
                 CultureInfo[] supportedCultures = new[]
                 {
                     new CultureInfo("en"),
-                    new CultureInfo("ka"),
+                    //new CultureInfo("ka"),
                 };
 
                 options.DefaultRequestCulture = new RequestCulture("en");

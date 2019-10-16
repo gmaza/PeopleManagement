@@ -3,6 +3,7 @@ using PM.Common.CommonModels;
 using PM.Domain.People;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,5 +22,6 @@ namespace PM.Application.People
 
         Task<Result> RemoveRelation(int personID, int targetID);
         Task<Result<string>> SavePhoto(int id, IFormFile file);
+        FileStream GetPhoto(string name);
     }
 }

@@ -22,7 +22,7 @@ namespace PM.Infrastructure.SharedResources.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class SharedResources_SharedResource {
+    internal class SharedResources_SharedResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace PM.Infrastructure.SharedResources.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PM.Infrastructure.SharedResources.Resources.SharedResources.SharedResource", typeof(SharedResources_SharedResource).Assembly);
@@ -51,7 +51,7 @@ namespace PM.Infrastructure.SharedResources.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,9 @@ namespace PM.Infrastructure.SharedResources.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to სახელი ცარიელია.
+        ///   Looks up a localized string similar to The firstname is empty.
         /// </summary>
-        public static string FIRSTNAME_IS_EMPTY {
+        internal static string FIRSTNAME_IS_EMPTY {
             get {
                 return ResourceManager.GetString("FIRSTNAME_IS_EMPTY", resourceCulture);
             }

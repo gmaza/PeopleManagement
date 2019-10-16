@@ -27,7 +27,6 @@ namespace PM.WebAPI.ActionFilters
                 var ex = result.Exception as LocalizableException;
                 var errorText = _sharedLocalizer[ex.MessageKey]?.Value;
                 result.ExceptionHandled = true;
-                result.Exception = null;
                 result.Result = new BadRequestObjectResult(errorText);
             }
         }

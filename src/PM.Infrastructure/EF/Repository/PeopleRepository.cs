@@ -44,6 +44,7 @@ namespace PM.Infrastructure.Repository
             old.PersonalNumber = newEntity.PersonalNumber;
             old.PhoneNumber = newEntity.PhoneNumber.Number.Value;
             old.PhoneNumberType = newEntity.PhoneNumber.PhoneNumberType;
+            old.LastUpdateDate = DateTime.Now;
 
             UpdateRelations(id, newEntity, old);
 
@@ -65,6 +66,8 @@ namespace PM.Infrastructure.Repository
             old.PersonalNumber = newEntity.PersonalNumber;
             old.PhoneNumber = newEntity.PhoneNumber.Number.Value;
             old.PhoneNumberType = newEntity.PhoneNumber.PhoneNumberType;
+            old.ImageUrl = newEntity.ImageUrl;
+            old.LastUpdateDate = DateTime.Now;
 
             UpdateRelations(id, newEntity, old);
 

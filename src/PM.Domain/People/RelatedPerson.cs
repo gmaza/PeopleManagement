@@ -7,7 +7,6 @@ namespace PM.Domain.People
 {
     public class RelatedPerson : BaseEntity
     {
-        public int ID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public GenderTypes Gender { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -178,14 +179,19 @@ namespace PM.Application.People
 
         public async Task<Result<string>> SavePhoto(int id, IFormFile file)
         {
-            var name = Guid.NewGuid().ToString() + file.ContentType;
+            var name = Guid.NewGuid().ToString()+ "." + file.FileName.Split(".").Last();
             await _fileSystemClien.SaveImage(file, name);
             var person = await _peopleDomainService.GetPerson(id);
-            person.ImageUrl = name;
+            person.ImageUrl = "/api/cdnfake/" + name;
             var result = await _peopleDomainService.UpdatePerson(id, person);
             if (result.IsSuccess)
                 return Result<string>.GetSuccessInstance("/api/statics/"+name);
             else return new Result<string>(result.StatusCode, result.IsSuccess, result.Message, "");
+        }
+
+        public FileStream GetPhoto(string name)
+        {
+            return _fileSystemClien.GetImage(name);
         }
     }
 }

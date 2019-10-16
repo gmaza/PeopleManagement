@@ -28,12 +28,8 @@
 
   <ItemGroup>
     <EmbeddedResource Update="SharedResources\Resources\SharedResources.SharedResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SharedResources.SharedResource.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="SharedResources\Resources\SharedResources.SharedResource.en.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SharedResource.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

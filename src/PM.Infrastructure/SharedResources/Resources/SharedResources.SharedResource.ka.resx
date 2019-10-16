@@ -119,10 +119,5 @@
   </resheader>
   <data name="FIRSTNAME_IS_EMPTY" xml:space="preserve">
     <value>სახელი ცარიელია</value>
-    <comment>sfdsf</comment>
-  </data>
-  <data name="sdfsdf" xml:space="preserve">
-    <value>sdfsdfsd</value>
-    <comment>sdf</comment>
   </data>
 </root>
