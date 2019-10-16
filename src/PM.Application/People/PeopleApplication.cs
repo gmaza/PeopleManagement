@@ -31,30 +31,19 @@ namespace PM.Application.People
 
         public async Task<Result<int>> CreatePerson(CreatePersonCommand cmd)
         {
-            //try
-            //{
-                var person = new Person(cmd.FirstName,
-                                    cmd.LastName,
-                                    (GenderTypes)cmd.Gender,
-                                    cmd.PersonalNumber,
-                                    cmd.BirthDate);
 
-                person.CityID = cmd.CityID;
-                if (!string.IsNullOrEmpty(cmd.PhoneNumber))
-                    person.PhoneNumber =
-                        new PhoneNumber(cmd.PhoneNumber, (PhoneNumberTypes)cmd.PhoneNumberType);
+            var person = new Person(cmd.FirstName,
+                                cmd.LastName,
+                                (GenderTypes)cmd.Gender,
+                                cmd.PersonalNumber,
+                                cmd.BirthDate);
 
-                return await _peopleDomainService.CreatePerson(person);
-            //}
-            //catch (LocalizableException ex)
-            //{
-            //    return new Result<int>(-1, false, _sharedLocalizer[ex.MessageKey], 0);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return new Result<int>(-1, false, "unexpected", 0);
-            //    //TODO: lohs
-            //}
+            person.CityID = cmd.CityID;
+            if (!string.IsNullOrEmpty(cmd.PhoneNumber))
+                person.PhoneNumber =
+                    new PhoneNumber(cmd.PhoneNumber, (PhoneNumberTypes)cmd.PhoneNumberType);
+
+            return await _peopleDomainService.CreatePerson(person);
         }
 
         public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Filter(FilterModel<string> f)
@@ -179,13 +168,13 @@ namespace PM.Application.People
 
         public async Task<Result<string>> SavePhoto(int id, IFormFile file)
         {
-            var name = Guid.NewGuid().ToString()+ "." + file.FileName.Split(".").Last();
+            var name = Guid.NewGuid().ToString() + "." + file.FileName.Split(".").Last();
             await _fileSystemClien.SaveImage(file, name);
             var person = await _peopleDomainService.GetPerson(id);
             person.ImageUrl = "/api/cdnfake/" + name;
             var result = await _peopleDomainService.UpdatePerson(id, person);
             if (result.IsSuccess)
-                return Result<string>.GetSuccessInstance("/api/statics/"+name);
+                return Result<string>.GetSuccessInstance("/api/statics/" + name);
             else return new Result<string>(result.StatusCode, result.IsSuccess, result.Message, "");
         }
 

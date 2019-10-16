@@ -68,5 +68,14 @@ namespace PM.Infrastructure.SharedResources.Resources {
                 return ResourceManager.GetString("FIRSTNAME_IS_EMPTY", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to მოხდა გაუთვალისწინებელი შეცდომა.
+        /// </summary>
+        internal static string unexpected {
+            get {
+                return ResourceManager.GetString("unexpected", resourceCulture);
+            }
+        }
     }
 }

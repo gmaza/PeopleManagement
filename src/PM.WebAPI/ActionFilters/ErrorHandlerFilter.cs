@@ -23,10 +23,17 @@ namespace PM.WebAPI.ActionFilters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var result = await next();
-            if (result.Exception != null && result.Exception is LocalizableException)
+            if (result.Exception != null)
             {
-                var ex = result.Exception as LocalizableException;
-                var errorText = _sharedLocalizer[ex.MessageKey]?.Value;
+                string errorText = string.Empty;
+                if (result.Exception is LocalizableException)
+                {
+                    var ex = result.Exception as LocalizableException;
+                    errorText = _sharedLocalizer[ex.MessageKey]?.Value;
+                }
+                else
+                    errorText = _sharedLocalizer["unexpected"]?.Value;
+
                 result.ExceptionHandled = true;
                 Result resultObj = new Result(-1, false, errorText);
                 result.Result = new BadRequestObjectResult(resultObj);

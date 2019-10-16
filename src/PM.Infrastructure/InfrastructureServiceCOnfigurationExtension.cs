@@ -26,12 +26,12 @@ namespace PM.Infrastructure
             var optionsBuilder = new DbContextOptionsBuilder<PMContext>();
             optionsBuilder.UseSqlServer(conf.GetConnectionString("DefaultConnection"));
 
-            //services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
-            services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
+            services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
+            //services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
 
             using (var context = new PMContext(optionsBuilder.Options))
             {
-           //     context.Database.Migrate();
+                context.Database.Migrate();
             }
 
             services.AddAutoMapper(typeof(EFProfile).Assembly);
@@ -40,11 +40,12 @@ namespace PM.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var uploadsPath = conf.GetSection("Filesystem")["uploads"];
+            var logsPath = conf.GetSection("Filesystem")["logs"];
             services.AddScoped<IFileSystemClient>(t => new FileSystemClient(uploadsPath));
 
 
             services.AddSingleton<ILogger>(s=> new LoggerConfiguration()
-                            .WriteTo.File("C:\\logs\\pm.txt", rollingInterval: RollingInterval.Day)
+                            .WriteTo.File(logsPath, rollingInterval: RollingInterval.Day)
                             .CreateLogger());
 
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });

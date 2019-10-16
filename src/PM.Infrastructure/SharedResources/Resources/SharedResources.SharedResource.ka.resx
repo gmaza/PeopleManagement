@@ -120,4 +120,7 @@
   <data name="FIRSTNAME_IS_EMPTY" xml:space="preserve">
     <value>სახელი ცარიელია</value>
   </data>
+  <data name="unexpected" xml:space="preserve">
+    <value>მოხდა გაუთვალისწინებელი შეცდომა</value>
+  </data>
 </root>
