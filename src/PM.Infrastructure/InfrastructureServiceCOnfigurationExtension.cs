@@ -25,12 +25,12 @@ namespace PM.Infrastructure
             var optionsBuilder = new DbContextOptionsBuilder<PMContext>();
             optionsBuilder.UseSqlServer(conf.GetConnectionString("DefaultConnection"));
 
-            services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
-            //services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
+            //services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
+            services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
 
             using (var context = new PMContext(optionsBuilder.Options))
             {
-                context.Database.Migrate();
+           //     context.Database.Migrate();
             }
 
             services.AddAutoMapper(typeof(EFProfile).Assembly);
@@ -47,7 +47,7 @@ namespace PM.Infrastructure
                 CultureInfo[] supportedCultures = new[]
                 {
                     new CultureInfo("en"),
-                    //new CultureInfo("ka"),
+                    new CultureInfo("ka"),
                 };
 
                 options.DefaultRequestCulture = new RequestCulture("en");
