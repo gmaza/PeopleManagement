@@ -38,7 +38,8 @@ namespace PM.Infrastructure
             services.AddScoped<ICitiesRepository, CitiesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<IFileSystemClient>(t => new FileSystemClient("/uploads"));
+            var uploadsPath = conf.GetSection("Filesystem")["uploads"];
+            services.AddScoped<IFileSystemClient>(t => new FileSystemClient(uploadsPath));
 
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
 
