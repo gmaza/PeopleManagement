@@ -11,6 +11,7 @@ using PM.Infrastructure.EF.UnitOfWork;
 using PM.Infrastructure.FileSytem;
 using PM.Infrastructure.Mapper;
 using PM.Infrastructure.Repository;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -40,6 +41,11 @@ namespace PM.Infrastructure
 
             services.AddScoped<IFileSystemClient>(t => new FileSystemClient("/uploads"));
 
+
+            services.AddSingleton<ILogger>(s=> new LoggerConfiguration()
+                            .WriteTo.File("C:\\logs\\pm.txt", rollingInterval: RollingInterval.Day)
+                            .CreateLogger());
+
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -55,7 +61,5 @@ namespace PM.Infrastructure
                 options.SupportedUICultures = supportedCultures;
             });
         }
-
-      
     }
 }
