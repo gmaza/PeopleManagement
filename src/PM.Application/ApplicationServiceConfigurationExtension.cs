@@ -1,5 +1,6 @@
 ﻿//using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using PM.Application.Cities;
 using PM.Application.People;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace PM.Application
         public static void RegisterApplication(this IServiceCollection services)
         {
             services.AddScoped<IPeopleApplication, PeopleApplication>();
+            services.AddScoped<ICitiesApplication, CitiesApplication>();
         }
     }
 }

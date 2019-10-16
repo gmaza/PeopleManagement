@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PM.Domain.Interfaces.Repository;
 using PM.Infrastructure.EF.Context;
+using PM.Infrastructure.EF.Repository;
 using PM.Infrastructure.EF.UnitOfWork;
 using PM.Infrastructure.Mapper;
 using PM.Infrastructure.Repository;
@@ -33,6 +34,7 @@ namespace PM.Infrastructure
 
             services.AddAutoMapper(typeof(EFProfile).Assembly);
             services.AddScoped<IPeopleRepository, PeopleRepository>();
+            services.AddScoped<ICitiesRepository, CitiesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
@@ -42,6 +44,7 @@ namespace PM.Infrastructure
                 CultureInfo[] supportedCultures = new[]
                 {
                     new CultureInfo("en"),
+                    new CultureInfo("ka"),
                 };
 
                 options.DefaultRequestCulture = new RequestCulture("en");

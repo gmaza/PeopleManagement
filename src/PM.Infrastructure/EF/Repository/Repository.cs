@@ -24,7 +24,7 @@ namespace PM.Infrastructure.Repository
             this.mapper = mapper;
         }
 
-        public Result<int> Add(TDomainEntity entity)
+        public virtual Result<int> Add(TDomainEntity entity)
         {
             var dbEntity = mapper.Map<TDBEntity>(entity);
             Context.Set<TDBEntity>().Add(dbEntity);
@@ -32,7 +32,7 @@ namespace PM.Infrastructure.Repository
             return Result<int>.GetSuccessInstance(entity.ID);
         }
 
-        public async Task<Result<int>> AddAsync(TDomainEntity entity)
+        public virtual async Task<Result<int>> AddAsync(TDomainEntity entity)
         {
             var dbEntity = mapper.Map<TDBEntity>(entity);
             Context.Set<TDBEntity>().Add(dbEntity);
@@ -40,7 +40,7 @@ namespace PM.Infrastructure.Repository
             return Result<int>.GetSuccessInstance(entity.ID);
         }
 
-        public Result<IEnumerable<int>> AddRange(IEnumerable<TDomainEntity> entities)
+        public virtual Result<IEnumerable<int>> AddRange(IEnumerable<TDomainEntity> entities)
         {
             var dbEntities = mapper.Map<IEnumerable<TDBEntity>>(entities);
             Context.Set<TDBEntity>().AddRange(dbEntities);
@@ -49,7 +49,7 @@ namespace PM.Infrastructure.Repository
                 .GetSuccessInstance(dbEntities.Select(e => e.ID));
         }
 
-        public async Task<Result<IEnumerable<int>>> AddRangeAsync(IEnumerable<TDomainEntity> entities)
+        public virtual async Task<Result<IEnumerable<int>>> AddRangeAsync(IEnumerable<TDomainEntity> entities)
         {
             var dbEntities = mapper.Map<IEnumerable<TDBEntity>>(entities);
             Context.Set<TDBEntity>().AddRange(dbEntities);
@@ -58,21 +58,21 @@ namespace PM.Infrastructure.Repository
                 .GetSuccessInstance(dbEntities.Select(e => e.ID));
         }
 
-        public TDomainEntity Get(int ID)
+        public virtual TDomainEntity Get(int ID)
         {
             var res = Context.Set<TDBEntity>().Find(ID);
             var entity = res.IsDeleted ? null : res;
             return mapper.Map<TDomainEntity>(entity);
         }
 
-        public async Task<TDomainEntity> GetAsync(int ID)
+        public virtual async Task<TDomainEntity> GetAsync(int ID)
         {
             var res = await Context.Set<TDBEntity>().FindAsync(ID);
             var entity = res == null || res.IsDeleted ? null : res;
             return mapper.Map<TDomainEntity>(entity);
         }
 
-        public ICollection<TDomainEntity> GetAll()
+        public virtual ICollection<TDomainEntity> GetAll()
         {
             var entities = Context
                 .Set<TDBEntity>()
@@ -81,7 +81,7 @@ namespace PM.Infrastructure.Repository
             return mapper.Map<List<TDomainEntity>>(entities);
         }
 
-        public async Task<ICollection<TDomainEntity>> GetAllAsync()
+        public virtual async Task<ICollection<TDomainEntity>> GetAllAsync()
         {
             var entities = await Context
                                     .Set<TDBEntity>()
@@ -91,7 +91,7 @@ namespace PM.Infrastructure.Repository
             return mapper.Map<List<TDomainEntity>>(entities);
         }
 
-        public Result Remove(int entityID)
+        public virtual Result Remove(int entityID)
         {
             var entity = Context
                 .Set<TDBEntity>()
@@ -106,7 +106,7 @@ namespace PM.Infrastructure.Repository
             return Result.GetSuccessInstance();
         }
 
-        public async Task<Result> RemoveAsync(int entityID)
+        public virtual async Task<Result> RemoveAsync(int entityID)
         {
             var entity = Context
                 .Set<TDBEntity>()

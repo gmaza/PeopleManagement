@@ -19,6 +19,17 @@ namespace PM.Infrastructure.Repository
         {
         }
 
+        public override async Task<Person> GetAsync(int ID)
+        {
+            var res = await Context
+                .Set<PersonEntity>()
+                .Include(p=>p.City)
+                .FirstOrDefaultAsync(p=>p.ID == ID);
+
+            var entity = res == null || res.IsDeleted ? null : res;
+            return mapper.Map<Person>(entity);
+        }
+
         public override Result Update(int id, Person newEntity)
         {
             var old = Context.Set<PersonEntity>()

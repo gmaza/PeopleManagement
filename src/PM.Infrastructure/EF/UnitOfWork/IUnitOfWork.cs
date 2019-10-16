@@ -1,4 +1,5 @@
 ﻿using PM.Common.CommonModels;
+using PM.Domain.Cities;
 using PM.Domain.Interfaces.Repository;
 using PM.Domain.People;
 using PM.Infrastructure.EF.Context;
@@ -14,5 +15,6 @@ namespace PM.Infrastructure.EF.UnitOfWork
     {
         PMContext Context { get; }
         IRepository<Person> People { get; }
+        IRepository<City> Cities { get; }
     }
 }
