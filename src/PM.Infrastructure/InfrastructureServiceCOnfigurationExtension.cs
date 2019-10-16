@@ -11,6 +11,7 @@ using PM.Infrastructure.EF.UnitOfWork;
 using PM.Infrastructure.FileSytem;
 using PM.Infrastructure.Mapper;
 using PM.Infrastructure.Repository;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -25,12 +26,12 @@ namespace PM.Infrastructure
             var optionsBuilder = new DbContextOptionsBuilder<PMContext>();
             optionsBuilder.UseSqlServer(conf.GetConnectionString("DefaultConnection"));
 
-            services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
-            //services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
+            //services.AddDbContext<PMContext>(options => options.UseSqlServer(conf["ConnectionStrings:DefaultConnection"]));
+            services.AddDbContext<PMContext>(options => options.UseInMemoryDatabase(databaseName: "PM"));
 
             using (var context = new PMContext(optionsBuilder.Options))
             {
-                context.Database.Migrate();
+           //     context.Database.Migrate();
             }
 
             services.AddAutoMapper(typeof(EFProfile).Assembly);
@@ -41,6 +42,11 @@ namespace PM.Infrastructure
             var uploadsPath = conf.GetSection("Filesystem")["uploads"];
             services.AddScoped<IFileSystemClient>(t => new FileSystemClient(uploadsPath));
 
+
+            services.AddSingleton<ILogger>(s=> new LoggerConfiguration()
+                            .WriteTo.File("C:\\logs\\pm.txt", rollingInterval: RollingInterval.Day)
+                            .CreateLogger());
+
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
 
             services.Configure<RequestLocalizationOptions>(options =>
@@ -48,7 +54,7 @@ namespace PM.Infrastructure
                 CultureInfo[] supportedCultures = new[]
                 {
                     new CultureInfo("en"),
-                    //new CultureInfo("ka"),
+                    new CultureInfo("ka"),
                 };
 
                 options.DefaultRequestCulture = new RequestCulture("en");
@@ -56,7 +62,5 @@ namespace PM.Infrastructure
                 options.SupportedUICultures = supportedCultures;
             });
         }
-
-      
     }
 }

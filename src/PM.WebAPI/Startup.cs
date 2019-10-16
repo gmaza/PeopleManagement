@@ -16,6 +16,7 @@ using PM.Application;
 using PM.Domain;
 using PM.Infrastructure;
 using PM.WebAPI.ActionFilters;
+using PM.WebAPI.Middlewares;
 
 namespace PM.WebAPI
 {
@@ -69,6 +70,7 @@ namespace PM.WebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.ConfigureExceptionLoggerMiddlware();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
