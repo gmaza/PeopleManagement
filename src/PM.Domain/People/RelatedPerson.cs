@@ -18,6 +18,7 @@ namespace PM.Domain.People
         public string PhoneNumber { get; set; }
         public PhoneNumberTypes PhoneNumberType { get; set; }
         public string ImageUrl { get; set; }
+        public int RelationID { get; set; }
         public RelationTypes RelationType { get; set; }
     }
 }

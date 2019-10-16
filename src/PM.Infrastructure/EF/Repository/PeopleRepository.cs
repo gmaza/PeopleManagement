@@ -21,7 +21,10 @@ namespace PM.Infrastructure.Repository
 
         public override Result Update(int id, Person newEntity)
         {
-            var old = Context.Set<PersonEntity>().Find(id);
+            var old = Context.Set<PersonEntity>()
+                .Include(p => p.Relations)
+                .FirstOrDefault(p => p.ID == id);
+
             old.BirthDate = newEntity.BirthDate;
             old.CityID = newEntity.CityID;
             old.FirstName = newEntity.FirstName;
@@ -39,7 +42,10 @@ namespace PM.Infrastructure.Repository
 
         public override async Task<Result> UpdateAsync(int id, Person newEntity)
         {
-            var old = Context.Set<PersonEntity>().Find(id);
+            var old = Context.Set<PersonEntity>()
+                .Include(p => p.Relations)
+                .FirstOrDefault(p => p.ID == id);
+
             old.BirthDate = newEntity.BirthDate;
             old.CityID = newEntity.CityID;
             old.FirstName = newEntity.FirstName;
@@ -165,10 +171,27 @@ namespace PM.Infrastructure.Repository
 
         public async Task<IEnumerable<RelatedPerson>> GetRelationPeople(int id)
         {
-            var result =  from rp in Context.Set<PeopleRelationEntity>()
-                                    where !rp.RelatedPerson.IsDeleted
-                                   select rp.RelatedPerson;
-            return mapper.Map<IEnumerable<PersonEntity>, IEnumerable<RelatedPerson>>(await result.ToListAsync());
+            var result = from rp in Context.Set<PeopleRelationEntity>()
+                         let p = rp.RelatedPerson
+                         where !p.IsDeleted
+                         select new RelatedPerson
+                         {
+                             BirthDate = p.BirthDate,
+                             City = p.City == null ? null : p.City.Name,
+                             CityID = p.CityID,
+                             RelationType = rp.RelationType,
+                             FirstName = p.FirstName,
+                             Gender = p.Gender,
+                             ImageUrl = p.ImageUrl,
+                             LastName = p.LastName,
+                             ID = p.ID,
+                             PersonalNumber = p.PersonalNumber,
+                             PhoneNumber = p.PhoneNumber,
+                             PhoneNumberType = p.PhoneNumberType,
+                             RelationID = rp.ID
+                         };
+
+            return await result.ToListAsync();
         }
     }
 }

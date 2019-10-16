@@ -6,11 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PM.Common\PM.Common.csproj" />
     <ProjectReference Include="..\PM.Domain\PM.Domain.csproj" />
+    <ProjectReference Include="..\PM.Infrastructure\PM.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

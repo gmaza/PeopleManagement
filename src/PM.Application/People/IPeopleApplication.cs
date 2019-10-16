@@ -17,5 +17,7 @@ namespace PM.Application.People
         Task<Result> Delete(int id);
 
         Task<Result> MakeRelation(int personID, int targetID, RelationTypes type);
+
+        Task<Result> RemoveRelation(int personID, int targetID);
     }
 }

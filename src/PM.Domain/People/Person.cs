@@ -1,4 +1,5 @@
 ﻿using PM.Common.CommonModels;
+using PM.Common.Exceptions;
 using PM.Domain.BaseClasses;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ namespace PM.Domain.People
 {
     public class Person : BaseEntity, IAggregateRoot
     {
+        private const string LETTER_DUPPLICATION_PATTERN = "(^[a-zA-Z]+$|^[ა-ჰ]+$)";
+
         private List<RelatedPerson> _relatedPeople;
         private GenderTypes _gender;
         private string _personalNumber;
@@ -38,7 +41,11 @@ namespace PM.Domain.People
             LastName = lastName;
 
             _relatedPeople = new List<RelatedPerson>();
-            Validate("FirstName");
+        }
+
+        public void RemoveRelatedPerson(int id)
+        {
+            _relatedPeople.RemoveAll(p => p.RelationID == id);
         }
 
         public void AddRelatedPerson(Person rp, RelationTypes type)
@@ -80,7 +87,7 @@ namespace PM.Domain.People
             {
                 result = _validators[fieldName]();
                 if (!result.IsSuccess)
-                    throw new Exception(result.Message);
+                    throw new LocalizableException(result.Message, result.Message);
             }
         }
 
@@ -102,7 +109,7 @@ namespace PM.Domain.People
             set
             {
                 _lastName = value;
-                Validate();
+                Validate("LastName");
             }
         }
 
@@ -112,7 +119,7 @@ namespace PM.Domain.People
             set
             {
                 _gender = value;
-                Validate();
+                Validate("Gender");
             }
         }
 
@@ -122,7 +129,7 @@ namespace PM.Domain.People
             set
             {
                 _personalNumber = value;
-                Validate();
+                Validate("PersonalNumber");
             }
         }
 
@@ -132,7 +139,7 @@ namespace PM.Domain.People
             set
             {
                 _birthDate = value;
-                Validate();
+                Validate("BirthDate");
             }
         }
 
@@ -142,7 +149,6 @@ namespace PM.Domain.People
             set
             {
                 _city = value;
-                Validate();
             }
         }
 
@@ -152,7 +158,6 @@ namespace PM.Domain.People
             set
             {
                 _cityID = value;
-                Validate();
             }
         }
 
@@ -162,7 +167,7 @@ namespace PM.Domain.People
             set
             {
                 _phoneNumber = value;
-                Validate();
+                Validate("PhoneNumber");
             }
         }
 
@@ -172,25 +177,70 @@ namespace PM.Domain.People
             set
             {
                 _imageUrl = value;
-                Validate();
             }
         }
-
 
         private void InitValidators()
         {
             _validators = new Dictionary<string, Func<Result>>()
             {
-                { "FirstName", () => {
-                   var result = Result.GetSuccessInstance();
-                    if(string.IsNullOrEmpty(_firstName))
-                        result = new Result(-1, false, "სახელი სავალდებულო ველია");
-                    if(_firstName.Length < 2 || _firstName.Length > 50)
-                        result = new Result(-1, false, "სახელში უნდა შედგებოდეს მინიმუმ 2 და მაქსიმუმ 50 სიმბოლოსგან");
-                    if(!Regex.IsMatch(_firstName, "(^[a-zA-Z]+$|^[ა-ჰ]+$)"))
-                        result = new Result(-1, false, "უნდა შეიცავდეს მხოლოდ ქართული ან ლათინური ანბანის ასოებს, არ უნდა შეიცავდეს ერთდროულად ლათინურ და ქართულ ასოებს");
-                    return result;
+                {"ID", () => {
+                    if (ID < 0)
+                         return new Result(-1, false, "ID_SHOULD_BE_POSITIVE");
+                    return  Result.GetSuccessInstance();
                 } },
+
+                { "FirstName", () => {
+                    if(string.IsNullOrEmpty(_firstName))
+                       return new Result(-1, false, "FIRSTNAME_IS_EMPTY");
+                    if(_firstName.Length < 2 || _firstName.Length > 50)
+                        return new Result(-1, false, "FIRSTNAME_IS_INVALID_LENGTH");
+                    if(!Regex.IsMatch(_firstName, LETTER_DUPPLICATION_PATTERN))
+                       return new Result(-1, false, "FIRSTNAME_CONTAINS_MULTIPLE_LANGUAGE_LETTERS");
+                    return  Result.GetSuccessInstance();
+                }},
+
+                 { "LastName", () => {
+                    if(string.IsNullOrEmpty(_lastName))
+                       return new Result(-1, false, "LASTNAME_IS_EMPTY");
+                    if(_lastName.Length < 2 || _lastName.Length > 50)
+                        return new Result(-1, false, "LASTNAME_IS_INVALID_LENGTH");
+                    if(!Regex.IsMatch(_lastName, LETTER_DUPPLICATION_PATTERN))
+                       return new Result(-1, false, "LASTNAME_CONTAINS_MULTIPLE_LANGUAGE_LETTERS");
+                    return  Result.GetSuccessInstance();
+                }},
+
+                 { "Gender", () => {
+                    if((int)_gender > 1)
+                          return new Result(-1, false, "GENDER_IS_INVALID");
+                    return  Result.GetSuccessInstance();
+                }},
+
+                  { "PersonalNumber", () => {
+                    if(string.IsNullOrEmpty(_personalNumber))
+                       return new Result(-1, false, "PERSONALNUMBER_IS_EMPTY");
+                    if(_personalNumber.Length != 11)
+                        return new Result(-1, false, "PERSONALNUMBER_IS_INVALID_LENGTH");
+                    return  Result.GetSuccessInstance();
+                }},
+
+                  { "BirthDate", () => {
+                    if(_birthDate == DateTime.MinValue)
+                       return new Result(-1, false, "BIRTHDATE_IS_INVALID");
+                    var age = DateTime.Today.Year - _birthDate.Year;
+                    if (_birthDate.Date > DateTime.Today.AddYears(-age)) age--;
+                    if(age < 18)
+                        return new Result(-1, false, "AGE_IS_INVALID");
+                    return  Result.GetSuccessInstance();
+                }},
+
+                  { "PhoneNumber", () => {
+                    if(_phoneNumber == null || _phoneNumber.Number == null || _phoneNumber.Number.Value == null)
+                       return  Result.GetSuccessInstance();
+                    if(_phoneNumber.Number.Value.Length < 4 || _phoneNumber.Number.Value.Length > 50)
+                           return new Result(-1, false, "PHONENUMBER_IS_INVALID_LENGTH");
+                    return  Result.GetSuccessInstance();
+                }},
             };
         }
 

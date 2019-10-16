@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2048
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FB75D2A4-5D7B-4737-AF7C-40E674BE2316}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.WebAPI", "src\PM.WebAPI\PM.WebAPI.csproj", "{515D2114-8F10-45FA-949E-9E5F7E0F3357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.WebAPI", "src\PM.WebAPI\PM.WebAPI.csproj", "{515D2114-8F10-45FA-949E-9E5F7E0F3357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Domain", "src\PM.Domain\PM.Domain.csproj", "{3DDCF580-666A-4968-9170-28EE9B108B38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Domain", "src\PM.Domain\PM.Domain.csproj", "{3DDCF580-666A-4968-9170-28EE9B108B38}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0A337B71-F283-462B-B1B2-B005F8238C01}"
 EndProject
@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{0EC3C0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{967C68C7-0C4B-412D-9100-653967F8B897}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Application", "src\PM.Application\PM.Application.csproj", "{2410CDC1-5BD7-4159-B639-7C80146F9B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Application", "src\PM.Application\PM.Application.csproj", "{2410CDC1-5BD7-4159-B639-7C80146F9B1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Infrastructure", "src\PM.Infrastructure\PM.Infrastructure.csproj", "{5BFE89F8-C842-4D92-983C-524D54957DE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Infrastructure", "src\PM.Infrastructure\PM.Infrastructure.csproj", "{5BFE89F8-C842-4D92-983C-524D54957DE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Common", "src\PM.Common\PM.Common.csproj", "{0A1E340F-3B10-4DCF-8055-518FAB46D34C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Common", "src\PM.Common\PM.Common.csproj", "{0A1E340F-3B10-4DCF-8055-518FAB46D34C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

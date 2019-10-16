@@ -53,6 +53,8 @@ namespace PM.WebAPI
                 app.UseHsts();
             }
 
+            app.UseRequestLocalization();
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 

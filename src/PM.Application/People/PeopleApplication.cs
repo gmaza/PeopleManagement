@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Localization;
 using PM.Common.CommonModels;
+using PM.Common.Exceptions;
 using PM.Domain.People;
+using PM.Infrastructure.SharedResources;
 
 namespace PM.Application.People
 {
     public class PeopleApplication : IPeopleApplication
     {
         private readonly IPeopleDomainService _peopleDomainService;
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
 
-        public PeopleApplication(IPeopleDomainService peopleDomainService)
+        public PeopleApplication(IPeopleDomainService peopleDomainService, IStringLocalizer<SharedResource> sharedLocalizer)
         {
             _peopleDomainService = peopleDomainService;
+            _sharedLocalizer = sharedLocalizer;
         }
 
         public async Task<Result<int>> CreatePerson(CreatePersonCommand cmd)
@@ -28,14 +33,20 @@ namespace PM.Application.People
                                     cmd.BirthDate);
 
                 person.CityID = cmd.CityID;
-                person.PhoneNumber =
-                    new PhoneNumber(cmd.PhoneNumber, (PhoneNumberTypes)cmd.PhoneNumberType);
+                if (!string.IsNullOrEmpty(cmd.PhoneNumber))
+                    person.PhoneNumber =
+                        new PhoneNumber(cmd.PhoneNumber, (PhoneNumberTypes)cmd.PhoneNumberType);
 
                 return await _peopleDomainService.CreatePerson(person);
             }
+            catch (LocalizableException ex)
+            {
+                return new Result<int>(-1, false, _sharedLocalizer[ex.MessageKey], 0);
+            }
             catch (Exception ex)
             {
-                return new Result<int>(-1, false, ex.Message, 0);
+                return new Result<int>(-1, false, "unexpected", 0);
+                //TODO: lohs
             }
 
         }
@@ -107,7 +118,7 @@ namespace PM.Application.People
                 PersonalNumber = person.PersonalNumber,
                 PhoneNumber = person.PhoneNumber.Number.Value,
                 PhoneNumberType = (int)person.PhoneNumber.PhoneNumberType,
-                RelatedPeople = person.RelatedPeople?.Select(rp => new PeopleListItem
+                RelatedPeople = person.RelatedPeople?.Select(rp => new RelatedPersonDetails
                 {
                     ID = rp.ID,
                     BirthDate = rp.BirthDate,
@@ -119,6 +130,8 @@ namespace PM.Application.People
                     LastName = rp.LastName,
                     PersonalNumber = rp.PersonalNumber,
                     PhoneNumber = rp.PhoneNumber,
+                    RelationType = rp.RelationType,
+                    RelationID = rp.RelationID,
                 })
 
             };
@@ -136,6 +149,20 @@ namespace PM.Application.People
                 var person = await _peopleDomainService.GetPerson(personID);
                 var relativePerson = await _peopleDomainService.GetPerson(targetID);
                 person.AddRelatedPerson(relativePerson, type);
+                return await _peopleDomainService.UpdatePerson(personID, person);
+            }
+            catch (Exception ex)
+            {
+                return new Result(-1, false, ex.Message);
+            }
+        }
+
+        public async Task<Result> RemoveRelation(int personID, int relationID)
+        {
+            try
+            {
+                var person = await _peopleDomainService.GetPerson(personID);
+                person.RemoveRelatedPerson(relationID);
                 return await _peopleDomainService.UpdatePerson(personID, person);
             }
             catch (Exception ex)

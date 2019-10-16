@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +11,7 @@ using PM.Infrastructure.Mapper;
 using PM.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace PM.Infrastructure
@@ -31,6 +34,20 @@ namespace PM.Infrastructure
             services.AddAutoMapper(typeof(EFProfile).Assembly);
             services.AddScoped<IPeopleRepository, PeopleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                CultureInfo[] supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
       

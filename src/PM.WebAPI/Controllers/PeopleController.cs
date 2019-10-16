@@ -17,12 +17,12 @@ namespace PM.WebAPI.Controllers
 
         public PeopleController(IPeopleApplication peopleApplication)
         {
-            this._peopleApplication = peopleApplication;
+            _peopleApplication = peopleApplication;
         }
 
         // GET: api/People
         [HttpGet]
-        public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Get([FromQuery]string searchWord, 
+        public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Get([FromQuery]string searchWord,
                                                                         [FromQuery]int index = 0,
                                                                         [FromQuery]int nitems = 10,
                                                                         [FromQuery] string ordering = "ID")
@@ -37,7 +37,7 @@ namespace PM.WebAPI.Controllers
                     SortingColumn = ordering
                 }
             };
-            
+
             return await _peopleApplication.Filter(filter);
         }
 
