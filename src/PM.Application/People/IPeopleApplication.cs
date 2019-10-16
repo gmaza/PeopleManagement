@@ -1,4 +1,5 @@
-﻿using PM.Common.CommonModels;
+﻿using Microsoft.AspNetCore.Http;
+using PM.Common.CommonModels;
 using PM.Domain.People;
 using System;
 using System.Collections.Generic;
@@ -19,5 +20,6 @@ namespace PM.Application.People
         Task<Result> MakeRelation(int personID, int targetID, RelationTypes type);
 
         Task<Result> RemoveRelation(int personID, int targetID);
+        Task<Result<string>> SavePhoto(int id, IFormFile file);
     }
 }

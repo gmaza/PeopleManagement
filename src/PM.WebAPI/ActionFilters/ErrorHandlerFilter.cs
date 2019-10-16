@@ -1,0 +1,35 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Localization;
+using PM.Common.Exceptions;
+using PM.Infrastructure.SharedResources;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+
+namespace PM.WebAPI.ActionFilters
+{
+    public class ErrorHandlerFilter : IAsyncActionFilter
+    {
+        private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        public ErrorHandlerFilter(IStringLocalizer<SharedResource> sharedLocalizer)
+        {
+            _sharedLocalizer = sharedLocalizer;
+        }
+
+        public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        {
+            var result = await next();
+            if (result.Exception != null && result.Exception is LocalizableException)
+            {
+                var ex = result.Exception as LocalizableException;
+                var errorText = _sharedLocalizer[ex.MessageKey]?.Value;
+                result.ExceptionHandled = true;
+                result.Exception = null;
+                result.Result = new BadRequestObjectResult(errorText);
+            }
+        }
+    }
+}

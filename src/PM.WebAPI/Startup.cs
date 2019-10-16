@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using PM.Application;
 using PM.Domain;
 using PM.Infrastructure;
+using PM.WebAPI.ActionFilters;
 
 namespace PM.WebAPI
 {
@@ -34,6 +35,7 @@ namespace PM.WebAPI
             services.RegisterApplication();
             services.RegisterDomain();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddScoped<ErrorHandlerFilter>();
 
             services.AddSwaggerGen(c =>
             {

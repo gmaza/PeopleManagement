@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PM.Application.People;
 using PM.Common.CommonModels;
+using PM.WebAPI.ActionFilters;
 
 namespace PM.WebAPI.Controllers
 {
+    [ServiceFilter(typeof(ErrorHandlerFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class PeopleController : ControllerBase
@@ -69,10 +71,10 @@ namespace PM.WebAPI.Controllers
             await _peopleApplication.Delete(id);
         }
 
-        [HttpPost("connect/{id}/{targetID}")]
-        public async Task Connect(int id, int targetID)
+        [HttpPost("photo/{id}")]
+        public async Task<Result<string>> Post(int id, IFormFile file)
         {
-            await _peopleApplication.MakeRelation(id, targetID, Domain.People.RelationTypes.COLLEAGUE);
+           return await _peopleApplication.SavePhoto(id, file);
         }
     }
 }

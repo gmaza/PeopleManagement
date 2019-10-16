@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using PM.Common.CommonModels;
 using PM.Common.Exceptions;
 using PM.Domain.People;
+using PM.Infrastructure.FileSytem;
 using PM.Infrastructure.SharedResources;
 
 namespace PM.Application.People
@@ -15,17 +17,21 @@ namespace PM.Application.People
     {
         private readonly IPeopleDomainService _peopleDomainService;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
+        private readonly IFileSystemClient _fileSystemClien;
 
-        public PeopleApplication(IPeopleDomainService peopleDomainService, IStringLocalizer<SharedResource> sharedLocalizer)
+        public PeopleApplication(IPeopleDomainService peopleDomainService,
+            IStringLocalizer<SharedResource> sharedLocalizer,
+            IFileSystemClient fileSystemClient)
         {
             _peopleDomainService = peopleDomainService;
             _sharedLocalizer = sharedLocalizer;
+            _fileSystemClien = fileSystemClient;
         }
 
         public async Task<Result<int>> CreatePerson(CreatePersonCommand cmd)
         {
-            try
-            {
+            //try
+            //{
                 var person = new Person(cmd.FirstName,
                                     cmd.LastName,
                                     (GenderTypes)cmd.Gender,
@@ -38,17 +44,16 @@ namespace PM.Application.People
                         new PhoneNumber(cmd.PhoneNumber, (PhoneNumberTypes)cmd.PhoneNumberType);
 
                 return await _peopleDomainService.CreatePerson(person);
-            }
-            catch (LocalizableException ex)
-            {
-                return new Result<int>(-1, false, _sharedLocalizer[ex.MessageKey], 0);
-            }
-            catch (Exception ex)
-            {
-                return new Result<int>(-1, false, "unexpected", 0);
-                //TODO: lohs
-            }
-
+            //}
+            //catch (LocalizableException ex)
+            //{
+            //    return new Result<int>(-1, false, _sharedLocalizer[ex.MessageKey], 0);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return new Result<int>(-1, false, "unexpected", 0);
+            //    //TODO: lohs
+            //}
         }
 
         public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Filter(FilterModel<string> f)
@@ -169,6 +174,18 @@ namespace PM.Application.People
             {
                 return new Result(-1, false, ex.Message);
             }
+        }
+
+        public async Task<Result<string>> SavePhoto(int id, IFormFile file)
+        {
+            var name = Guid.NewGuid().ToString() + file.ContentType;
+            await _fileSystemClien.SaveImage(file, name);
+            var person = await _peopleDomainService.GetPerson(id);
+            person.ImageUrl = name;
+            var result = await _peopleDomainService.UpdatePerson(id, person);
+            if (result.IsSuccess)
+                return Result<string>.GetSuccessInstance("/api/statics/"+name);
+            else return new Result<string>(result.StatusCode, result.IsSuccess, result.Message, "");
         }
     }
 }

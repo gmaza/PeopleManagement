@@ -8,6 +8,7 @@ using PM.Domain.Interfaces.Repository;
 using PM.Infrastructure.EF.Context;
 using PM.Infrastructure.EF.Repository;
 using PM.Infrastructure.EF.UnitOfWork;
+using PM.Infrastructure.FileSytem;
 using PM.Infrastructure.Mapper;
 using PM.Infrastructure.Repository;
 using System;
@@ -36,6 +37,8 @@ namespace PM.Infrastructure
             services.AddScoped<IPeopleRepository, PeopleRepository>();
             services.AddScoped<ICitiesRepository, CitiesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IFileSystemClient>(t => new FileSystemClient("/uploads"));
 
             services.AddLocalization(o => { o.ResourcesPath = "SharedResources/Resources"; });
 
