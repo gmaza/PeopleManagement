@@ -1,6 +1,8 @@
 ﻿//using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PM.Application.Cities;
+using PM.Application.MapperProfiles;
 using PM.Application.People;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,7 @@ namespace PM.Application
         {
             services.AddScoped<IPeopleApplication, PeopleApplication>();
             services.AddScoped<ICitiesApplication, CitiesApplication>();
+            services.AddAutoMapper(typeof(DomainApplicationModels).Assembly);
         }
     }
 }

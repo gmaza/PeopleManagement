@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using PM.Common.CommonModels;
@@ -19,14 +20,17 @@ namespace PM.Application.People
         private readonly IPeopleDomainService _peopleDomainService;
         private readonly IStringLocalizer<SharedResource> _sharedLocalizer;
         private readonly IFileSystemClient _fileSystemClien;
+        private readonly IMapper mapper;
 
         public PeopleApplication(IPeopleDomainService peopleDomainService,
             IStringLocalizer<SharedResource> sharedLocalizer,
-            IFileSystemClient fileSystemClient)
+            IFileSystemClient fileSystemClient,
+            IMapper mapper)
         {
             _peopleDomainService = peopleDomainService;
             _sharedLocalizer = sharedLocalizer;
             _fileSystemClien = fileSystemClient;
+            this.mapper = mapper;
         }
 
         public async Task<Result<int>> CreatePerson(CreatePersonCommand cmd)
@@ -49,6 +53,43 @@ namespace PM.Application.People
         public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Filter(FilterModel<string> f)
         {
             var searchResult = await _peopleDomainService.FastSearch(f.Filter,
+                f.PageRequest.Index,
+                f.PageRequest.ShowPerPage,
+                f.PageRequest.SortingColumn);
+
+            var items = searchResult.Item1.Select(i => new PeopleListItem
+            {
+                ID = i.ID,
+                BirthDate = i.BirthDate,
+                City = i.City,
+                CityID = i.CityID,
+                FirstName = i.FirstName,
+                Gender = (int)i.Gender,
+                ImageUrl = i.ImageUrl,
+                LastName = i.LastName,
+                PersonalNumber = i.PersonalNumber,
+                PhoneNumber = i.PhoneNumber.Number.Value,
+            });
+
+            return new FilterResponse<IEnumerable<PeopleListItem>>(items, searchResult.Item2);
+        }
+
+        public async Task<FilterResponse<IEnumerable<PeopleListItem>>> FilterInDetails(FilterModel<FilterPeopleQuery> f)
+        {
+            var personFilter = new PeopleFilter
+            {
+                BirthDate = f.Filter.BirthDate,
+                CityID = f.Filter.CityID,
+                FirstName = f.Filter.FirstName,
+                Gender = f.Filter.Gender,
+                ID = f.Filter.ID,
+                LastName = f.Filter.LastName,
+                PersonalNumber = f.Filter.PersonalNumber,
+                PhoneNumber = f.Filter.PhoneNumber,
+                PhoneNumberType = f.Filter.PhoneNumberType
+            };
+
+            var searchResult = await _peopleDomainService.DeepSearch(personFilter,
                 f.PageRequest.Index,
                 f.PageRequest.ShowPerPage,
                 f.PageRequest.SortingColumn);

@@ -43,6 +43,27 @@ namespace PM.WebAPI.Controllers
             return await _peopleApplication.Filter(filter);
         }
 
+        // GET: api/People
+        [HttpGet("filter")]
+        public async Task<FilterResponse<IEnumerable<PeopleListItem>>> Filter([FromQuery]FilterPeopleQuery fields,
+                                                                        [FromQuery]int index = 0,
+                                                                        [FromQuery]int nitems = 10,
+                                                                        [FromQuery] string ordering = "ID")
+        {
+            var filter = new FilterModel<FilterPeopleQuery>
+            {
+                Filter = fields,
+                PageRequest =
+                {
+                    Index = index,
+                    ShowPerPage = nitems,
+                    SortingColumn = ordering
+                }
+            };
+
+            return await _peopleApplication.FilterInDetails(filter);
+        }
+
         // GET: api/People/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<PersonDetails> GetAsync(int id)

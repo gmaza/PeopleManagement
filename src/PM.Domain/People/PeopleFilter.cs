@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PM.Application.People
+namespace PM.Domain.People
 {
-    public class FilterPeopleQuery
+    public class PeopleFilter
     {
         public int? ID { get; set; }
         public string FirstName { get; set; }

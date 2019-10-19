@@ -43,5 +43,12 @@ namespace PM.Domain.People
         {
             return await _peopleRepository.RemoveAsync(id);
         }
+
+        public async Task<(IEnumerable<Person>, int)> DeepSearch(PeopleFilter person, int index, int showPerPage, string sortingColumn)
+        {
+            var people = await _peopleRepository.FilterInDetailsAsync(person, index * showPerPage, showPerPage, sortingColumn);
+            var quantity = await _peopleRepository.FilterDetailsCountAsync(person);
+            return (people, quantity);
+        }
     }
 }

@@ -23,8 +23,8 @@ namespace PM.Infrastructure.Repository
         {
             var res = await Context
                 .Set<PersonEntity>()
-                .Include(p=>p.City)
-                .FirstOrDefaultAsync(p=>p.ID == ID);
+                .Include(p => p.City)
+                .FirstOrDefaultAsync(p => p.ID == ID);
 
             var entity = res == null || res.IsDeleted ? null : res;
             return mapper.Map<Person>(entity);
@@ -206,6 +206,60 @@ namespace PM.Infrastructure.Repository
                          };
 
             return await result.ToListAsync();
+        }
+
+        public async Task<ICollection<Person>> FilterInDetailsAsync(PeopleFilter filter, int skip, int take, string sortingColumn)
+        {
+            IQueryable<PersonEntity> entities = from p in Context.Set<PersonEntity>()
+                                                where !p.IsDeleted
+                                                orderby sortingColumn descending
+                                                select p;
+
+            if (!string.IsNullOrEmpty(filter.FirstName))
+                entities = entities.Where(p => p.FirstName == filter.FirstName);
+
+            if (!string.IsNullOrEmpty(filter.LastName))
+                entities = entities.Where(p => p.LastName == filter.LastName);
+
+            if (!string.IsNullOrEmpty(filter.PersonalNumber))
+                entities = entities.Where(p => p.PersonalNumber == filter.PersonalNumber);
+
+            if (!string.IsNullOrEmpty(filter.PhoneNumber))
+                entities = entities.Where(p => p.PhoneNumber == filter.PhoneNumber);
+
+            if(filter.ID != null)
+                entities = entities.Where(p => p.ID == filter.ID);
+
+            var result = await entities
+                                .Skip(skip)
+                                .Take(take)
+                                .ToListAsync();
+
+            return mapper.Map<List<Person>>(result);
+        }
+
+        public async Task<int> FilterDetailsCountAsync(PeopleFilter filter)
+        {
+            IQueryable<PersonEntity> entities = from p in Context.Set<PersonEntity>()
+                                                where !p.IsDeleted
+                                                select p;
+
+            if (!string.IsNullOrEmpty(filter.FirstName))
+                entities = entities.Where(p => p.FirstName == filter.FirstName);
+
+            if (!string.IsNullOrEmpty(filter.LastName))
+                entities = entities.Where(p => p.LastName == filter.LastName);
+
+            if (!string.IsNullOrEmpty(filter.PersonalNumber))
+                entities = entities.Where(p => p.PersonalNumber == filter.PersonalNumber);
+
+            if (!string.IsNullOrEmpty(filter.PhoneNumber))
+                entities = entities.Where(p => p.PhoneNumber == filter.PhoneNumber);
+
+            if (filter.ID != null)
+                entities = entities.Where(p => p.ID == filter.ID);
+
+            return await entities.CountAsync();
         }
     }
 }

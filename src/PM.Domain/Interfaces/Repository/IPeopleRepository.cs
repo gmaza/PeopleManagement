@@ -13,5 +13,7 @@ namespace PM.Domain.Interfaces.Repository
 
         Task<int> FilterCountAsync(string searchWord);
         Task<IEnumerable<RelatedPerson>> GetRelationPeople(int id);
+        Task<ICollection<Person>> FilterInDetailsAsync(PeopleFilter filter, int v, int showPerPage, string sortingColumn);
+        Task<int> FilterDetailsCountAsync(PeopleFilter filter);
     }
 }

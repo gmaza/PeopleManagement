@@ -17,5 +17,7 @@ namespace PM.Domain.People
         Task<Result> UpdatePerson(int personID, Person person);
 
         Task<Result> Delete(int id);
+
+        Task<(IEnumerable<Person>, int)> DeepSearch(PeopleFilter filter, int index, int showPerPage, string sortingColumn);
     }
 }
