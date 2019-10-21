@@ -122,7 +122,7 @@ namespace PM.Infrastructure.Repository
 
         public async Task<ICollection<Person>> FilterAsync(string searchWord, int skip, int take, string sortingColumn)
         {
-            IQueryable<PersonEntity> entities = from p in Context.Set<PersonEntity>()
+            IQueryable<PersonEntity> entities = from p in Context.Set<PersonEntity>().Include(p=>p.Relations)
                                                 where !p.IsDeleted
                                                 orderby sortingColumn descending
                                                 select p;
