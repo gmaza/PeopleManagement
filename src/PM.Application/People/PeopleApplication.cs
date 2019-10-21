@@ -247,7 +247,7 @@ namespace PM.Application.People
                     reportItem.Relations.Add(new RelationTypeRemortListItem
                     {
                         Type = tp,
-                        QUantity = i.RelatedPeople.Count(p=>p.RelationType == tp)
+                        Quantity = i.RelatedPeople.Count(p=>p.RelationType == tp)
                     }); 
                 }
                 items.Add(reportItem);

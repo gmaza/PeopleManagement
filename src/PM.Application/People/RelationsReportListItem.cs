@@ -18,6 +18,6 @@ namespace PM.Application.People
     public class RelationTypeRemortListItem
     {
         public RelationTypes Type { get; set; }
-        public int QUantity { get; set; }
+        public int Quantity { get; set; }
     }
 }
