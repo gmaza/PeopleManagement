@@ -223,5 +223,37 @@ namespace PM.Application.People
         {
             return _fileSystemClien.GetImage(name);
         }
+
+        public async Task<FilterResponse<IEnumerable<RelationsReportListItem>>> GetRelationsReport(FilterModel<string> f)
+        {
+            var searchResult = await _peopleDomainService.FastSearch(f.Filter,
+                 f.PageRequest.Index,
+                 f.PageRequest.ShowPerPage,
+                 f.PageRequest.SortingColumn);
+
+            var items = new List<RelationsReportListItem>();
+            foreach (var i in searchResult.Item1)
+            {
+                var reportItem = new RelationsReportListItem
+                {
+                    ID = i.ID,
+                    FirstName = i.FirstName,
+                    LastName = i.LastName,
+                    PersonalNumber = i.PersonalNumber,
+                    Relations = new List<RelationTypeRemortListItem>()
+                };
+                foreach (RelationTypes tp in Enum.GetValues(typeof(RelationTypes)))
+                {
+                    reportItem.Relations.Add(new RelationTypeRemortListItem
+                    {
+                        Type = tp,
+                        QUantity = i.RelatedPeople.Count(p=>p.RelationType == tp)
+                    }); 
+                }
+                items.Add(reportItem);
+            } 
+
+            return new FilterResponse<IEnumerable<RelationsReportListItem>>(items, searchResult.Item2);
+        }
     }
 }

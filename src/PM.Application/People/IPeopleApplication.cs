@@ -13,6 +13,7 @@ namespace PM.Application.People
     {
         Task<Result<int>> CreatePerson(CreatePersonCommand command);
         Task<FilterResponse<IEnumerable<PeopleListItem>>> Filter(FilterModel<string> f);
+        Task<FilterResponse<IEnumerable<RelationsReportListItem>>> GetRelationsReport(FilterModel<string> f);
         Task<FilterResponse<IEnumerable<PeopleListItem>>> FilterInDetails(FilterModel<FilterPeopleQuery> f);
         Task<Result> Update(int id, UpdatePersonCommand cmd);
         Task<PersonDetails> Get(int id);
